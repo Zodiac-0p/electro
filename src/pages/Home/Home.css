@@ -1,0 +1,334 @@
+/* ---------- Theme Variables (reuse same root) ---------- */
+
+:root {
+  --blue: #0f245b;
+  --blue-light: #eaf0ff;
+  --orange: #f35005;
+  --orange-light: #fff3e6;
+  --text: #1f2937;
+  --border: #e5e7eb;
+}
+/* ---------- Category Tabs (Featured / Latest) ---------- */
+
+.category-tabs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tab-button {
+  padding: 10px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--blue);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.tab-button:hover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+}
+
+/* Active Tab */
+.tab-button.active {
+  background: linear-gradient(135deg, var(--blue), #0b1122);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(15, 36, 91, 0.25);
+}
+
+/* ---------- Success Toast ---------- */
+
+.success-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--blue), #0b1122);
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: slideFade 0.4s ease;
+}
+
+/* Accent strip (optional premium touch) */
+.success-toast::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  background: var(--orange);
+  border-radius: 12px 0 0 12px;
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- General Home Layout ---------- */
+
+.home {
+  padding: 20px 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+}
+
+/* ---------- Hero Section ---------- */
+
+/* ---------- Hero Height Fix ---------- */
+
+.hero {
+  min-height: 420px;              /* 🔒 prevents shrinking */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 20px;
+  background: linear-gradient(180deg, var(--blue-light), #ffffff);
+}
+
+
+.hero h2 {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+  color: var(--blue);
+}
+
+.hero p {
+  font-size: 1.15rem;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.hero h3 {
+  font-size: 1.7rem;
+  margin-top: 30px;
+  color: var(--orange);
+}
+
+/* ---------- Section Headers ---------- */
+
+.section-header {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: var(--blue);
+  position: relative;
+}
+
+.section-header::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--orange);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ---------- Features Section ---------- */
+
+.features {
+  padding: 50px 0;
+  background: var(--blue-light);
+}
+
+/* Optional card wrapper styling if FeatureCards use divs */
+.features .card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.features .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Product Sections ---------- */
+
+.products {
+  padding: 50px 0;
+}
+
+/* Featured Products */
+.featured-products {
+  padding: 50px 0;
+  background: #ffffff;
+}
+
+/* New Products */
+.new-products {
+  padding: 50px 0;
+  background: var(--orange-light);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 2.2rem;
+  }
+
+  .section-header {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 40px 16px;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+}
+/* ---------- Product Grid & Cards (FIX uneven cards) ---------- */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+  align-items: stretch; /* ✅ makes both columns equal height */
+}
+
+/* Use a dedicated class, not .card */
+.product-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* ✅ equal height */
+}
+
+/* Same image box height for all products */
+.product-image-box {
+  height: 240px; /* ✅ fixed height */
+  border-radius: 16px;
+  background: var(--blue-light);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.product-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ✅ keeps image fit */
+  padding: 18px;
+}
+
+/* Keep title/desc consistent */
+.product-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--blue);
+  margin: 6px 0 6px;
+}
+
+.product-brand {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+/* ✅ Clamp description so it doesn’t grow card height */
+.product-desc {
+  color: #374151;
+  line-height: 1.5;
+  margin: 0 0 10px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* ✅ only 2 lines */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: 48px; /* ✅ keeps same height even if short */
+}
+
+/* ✅ Push buttons / quantity to bottom */
+.product-actions {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.pagination-btn {
+  background: linear-gradient(135deg, #0f245b, #0b1122);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(23, 34, 62, 0.25);
+}
+
+.pagination-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pagination-info {
+  font-weight: 600;
+  color: #0f245b;
+}
+
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pagination-btn {
+    width: 100%;
+  }
+}

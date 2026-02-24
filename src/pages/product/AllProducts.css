@@ -1,0 +1,234 @@
+:root {
+  --blue: #0f245b;
+  --blue-light: #eaf0ff;
+  --orange: #f35005;
+  --orange-light: #fff3e6;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+}
+
+/* ================= PAGE ================= */
+
+.all-products-container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 24px;
+  background: #f8fafc;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.all-products-container h1 {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 32px;
+}
+
+/* ================= GRID ================= */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 26px;
+}
+
+/* ================= PRODUCT CARD ================= */
+
+.product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= IMAGE ================= */
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #f9fafb;
+  padding: 10px;
+}
+
+/* ================= INFO ================= */
+
+.product-info {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px 0;
+  min-height: 42px;
+}
+
+.product-info p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.product-info .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--orange);
+  margin-top: auto;
+}
+
+/* ================= ACTIONS ================= */
+
+.product-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Quantity */
+.quantity-input {
+  width: 46px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Add to cart */
+.add-to-cart-btn {
+  flex: 1;
+  background: linear-gradient(135deg, var(--blue), #0b1122);
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-to-cart-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(23, 34, 62, 0.25);
+}
+
+.add-to-cart-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* ================= LOADER ================= */
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 220px;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 5px solid #e5e7eb;
+  border-top: 5px solid var(--blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+  }
+
+  .product-card img {
+    height: 180px;
+  }
+}
+
+.all-products-page{
+  padding: 24px 0;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.all-products-title{
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 18px;
+  color: #111827;
+}
+
+.all-products-msg{
+  text-align: center;
+  color: #374151;
+}
+
+.all-products-error{
+  text-align: center;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* pagination */
+.pagination{
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination button{
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.pagination button.active{
+  background: #0f245b;
+  color: #fff;
+  border-color: #0f245b;
+}
+
+.pagination button:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info{
+  font-size: 14px;
+  color: #374151;
+  margin-left: 6px;
+}

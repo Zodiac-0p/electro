@@ -1,0 +1,220 @@
+/* Layout container */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  background: #eef2f7;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 230px;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: width 0.25s ease;
+  overflow: hidden;
+
+  position: sticky; /* ✅ keeps it at top while scrolling */
+  top: 0;           /* ✅ start from top */
+  height: 100vh;    /* ✅ full height */
+}
+
+
+.admin-container.collapsed .admin-sidebar {
+  width: 70px;
+}
+
+/* Sidebar header */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.collapse-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Navigation */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 6px;
+}
+
+.nav-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: #2563eb;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.username {
+  font-weight: 800;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* Main area */
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.admin-topbar {
+  background: #fff;
+  padding: 14px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 800;
+}
+
+/* Content */
+.admin-content {
+  padding: 20px;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: fixed;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  .admin-main {
+    margin-left: 70px;
+  }
+}
+.admin-sidebar {
+  width: 230px;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: width 0.25s ease;
+  overflow: hidden; /* ✅ IMPORTANT: stop text spilling out */
+}
+
+.admin-container.collapsed .admin-sidebar {
+  width: 70px;
+}
+
+/* Title hide when collapsed */
+.sidebar-title {
+  margin: 0;
+}
+.admin-container.collapsed .sidebar-title {
+  display: none;
+}
+
+/* Nav item layout */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap; /* ✅ prevent wrap */
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* Icon box (keeps alignment perfect) */
+.nav-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  flex: 0 0 34px;
+}
+
+/* ✅ Hide label when collapsed */
+.admin-container.collapsed .nav-label {
+  display: none;
+}
+
+/* ✅ Center icons when collapsed */
+.admin-container.collapsed .nav-item {
+  justify-content: center;
+  padding: 10px;
+}
+

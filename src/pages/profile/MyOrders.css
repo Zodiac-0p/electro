@@ -1,0 +1,174 @@
+:root {
+  --blue: #0f245b;
+  --blue-light: #eaf0ff;
+  --orange: #f35005;
+  --orange-light: #fff3e6;
+  --text: #1f2937;
+  --border: #e5e7eb;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #f59e0b;
+}
+
+/* ================= CONTAINER ================= */
+
+.orders-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+}
+
+/* ================= TITLE ================= */
+
+.orders-title {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--blue);
+}
+
+/* ================= CARD ================= */
+
+.orders-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  border-top: 6px solid var(--blue);
+  overflow-x: auto;
+}
+
+/* ================= TABLE ================= */
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  background: var(--blue-light);
+  color: var(--blue);
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.orders-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.orders-table tr:hover {
+  background: #fafafa;
+}
+
+/* ================= STATUS BADGES ================= */
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+}
+
+.status-badge.pending {
+  background: var(--orange-light);
+  color: var(--orange);
+}
+
+.status-badge.processing {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+.status-badge.completed {
+  background: #dcfce7;
+  color: var(--success);
+}
+
+.status-badge.cancelled {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+/* ================= ACTION BUTTON ================= */
+
+.details-link {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, var(--blue), #0b1122);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: inline-block;
+}
+
+.details-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(23, 34, 62, 0.25);
+}
+
+/* ================= REMOVE (X) BUTTON ================= */
+
+.remove-order-btn {
+  background: transparent;
+  border: none;
+  color: var(--danger);
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.remove-order-btn:hover {
+  color: #991b1b;
+  transform: scale(1.2);
+}
+
+.remove-order-btn:focus {
+  outline: none;
+}
+
+/* ================= STATES ================= */
+
+.orders-loading,
+.orders-error,
+.orders-empty {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 1.1rem;
+}
+
+.orders-loading {
+  color: var(--blue);
+}
+
+.orders-error {
+  color: var(--danger);
+}
+
+.orders-empty {
+  color: #6b7280;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 600px) {
+  .orders-title {
+    font-size: 1.6rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+}

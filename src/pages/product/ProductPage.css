@@ -1,0 +1,298 @@
+.product-page {
+  padding: 30px;
+  background: #f9f9f9;
+  min-height: 100vh;
+}
+
+.product-container {
+  display: flex;
+  gap: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;  
+  align-items: flex-start;  
+}
+
+.product-main-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+}
+
+.product-details-section {
+  flex: 1;
+}
+
+.product-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-brand {
+  font-size: 16px;
+  color: #777;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.product-description {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.product-pricing {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.discount-price {
+  color: red;
+  margin-left: 10px;
+  text-decoration: line-through;
+  font-size: 18px;
+}
+
+.product-stock {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.in-stock {
+  color: green;
+}
+
+.out-stock {
+  color: red;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.quantity-btn {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.quantity-input {
+  width: 50px;
+  text-align: center;
+  border: 1px solid #ccc;
+  margin: 0 5px;
+}
+
+.add-to-cart-btn {
+  background: #ff6600;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-cart-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.product-extra {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* your existing css stays... add these at bottom */
+
+/* ===== Rating row ===== */
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 14px;
+}
+
+.rating-meta {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+/* ===== Stars ===== */
+.stars {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.star {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.35;
+}
+
+.star.active {
+  opacity: 1;
+}
+
+.star.readonly {
+  cursor: default;
+}
+
+/* ===== Reviews ===== */
+.reviews-section {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.review-form {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 10px 0 8px;
+}
+
+.review-textarea {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+  resize: vertical;
+}
+
+.review-submit {
+  margin-top: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.review-list {
+  display: grid;
+  gap: 12px;
+}
+
+.review-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.review-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.review-user {
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.review-date {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.review-comment {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+.error.small {
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ===== Suggested products ===== */
+.suggested-section {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.suggested-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.suggested-card {
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.suggested-card:hover {
+  transform: translateY(-2px);
+}
+
+.suggested-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.suggested-info {
+  padding: 10px 12px;
+}
+
+.suggested-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.suggested-price {
+  font-size: 14px;
+  opacity: 0.85;
+}

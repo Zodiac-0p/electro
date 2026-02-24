@@ -1,0 +1,154 @@
+:root {
+  --blue: #0f245b;
+  --orange: #f35005;
+  --text-light: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero {
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border-radius: 18px;
+}
+
+/* ✅ no gap here */
+.hero-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+/* ✅ each slide is exactly 100% width */
+.hero-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  padding: 0 10px; /* ✅ creates spacing look */
+}
+
+/* ✅ the “real” card */
+.hero-slide-inner {
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Overlay */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(15, 36, 91, 0.85),
+    rgba(15, 36, 91, 0.6),
+    rgba(15, 36, 91, 0.3)
+  );
+}
+.hero-content {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  max-width: 520px;
+  z-index: 2;
+}
+
+.hero-content h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.hero-content p {
+  font-size: 1.15rem;
+  margin: 0 0 22px;
+  line-height: 1.5;
+  color: #ffffff;          /* ✅ force white */
+  opacity: 1;              /* ✅ remove fade */
+  font-weight: 500;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--orange), #d94204);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(243, 80, 5, 0.4);
+}
+
+.hero-dots {
+  position: absolute;
+  bottom: 18px;
+  left: 40px;
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}
+
+.dot.active {
+  background: var(--orange);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-track {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 300px;
+  }
+
+  .hero-content {
+    left: 24px;
+    max-width: calc(100% - 48px);
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-dots {
+    left: 24px;
+  }
+}

@@ -1,0 +1,45 @@
+.policy-wrapper {
+  background: #f4f6f9;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.policy-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.policy-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.policy-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.policy-header p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.policy-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.policy-card h3 {
+  font-size: 20px;
+  margin-top: 25px;
+  margin-bottom: 12px;
+}
+
+.policy-card p {
+  margin: 8px 0;
+  color: #222;
+  line-height: 1.6;
+}

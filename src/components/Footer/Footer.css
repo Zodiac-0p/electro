@@ -1,0 +1,220 @@
+/* Footer.css */
+
+.footer-top-bar {
+    background-color: #0d386d; /* Dark blue color */
+    color: #fff;
+    padding: 15px 0;
+    font-size: 0.9rem;
+}
+
+.top-bar-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.top-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-bar-item i {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.footer {
+    background-color: #00224d; /* Main footer dark blue */
+    color: #fff;
+    padding: 60px 20px 20px;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: visible;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 30px;
+}
+
+.footer-section h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 10px;
+}
+
+.footer-section a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #007bff;
+}
+
+.newsletter-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+.newsletter-form input {
+    flex-grow: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    background-color: #fff;
+}
+
+.newsletter-form button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    background-color: #4f6319;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.newsletter-form button:hover {
+    background-color: #4f6319;
+}
+
+.social-icons {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #fff;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 40px;
+    border-top: 1px solid #334d66;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-bottom p {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.payment-icons img {
+    height: 25px;
+    margin: 0 5px;
+}
+
+.scroll-to-top {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    background-color: #ff9800;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.scroll-to-top:hover {
+    background-color: #ff6f00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .top-bar-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        min-width: unset;
+        width: 100%;
+        text-align: center;
+    }
+}
+.footer-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.footer-pagination button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #0f245b;
+  color: rgb(155, 137, 137);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.footer-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,452 @@
+/* =========================
+   ADMIN PAGE LAYOUT
+========================= */
+
+.admin-page {
+  padding: 28px;
+  background: #f4f6f9;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  background: #0f245b;
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  width: 260px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #0f245b;
+}
+
+.clear-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-table td {
+  padding: 14px;
+  border-top: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+.admin-table tr:hover {
+  background: #fafafa;
+}
+
+.name-cell .name {
+  font-weight: 700;
+  color: #111827;
+}
+
+.name-cell .sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+/* =========================
+   STOCK PILL
+========================= */
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pill-ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pill-bad {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* =========================
+   STATES
+========================= */
+
+.admin-alert {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-loading {
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.empty-box {
+  background: white;
+  padding: 40px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.empty-box h3 {
+  margin: 0 0 8px;
+}
+
+/* =========================
+   EDIT MODAL
+========================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.modal {
+  width: min(720px, 100%);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ===== Image Upload UI in Modal ===== */
+.img-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.img-preview {
+  width: 160px;
+  height: 120px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-actions {
+  flex: 1;
+}
+
+.file-input {
+  width: 100%;
+  border: 1px dashed #d1d5db;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.img-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .img-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .img-preview {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+}
+
+.modal-form {
+  padding: 20px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  font-size: 14px;
+}
+
+.modal-textarea {
+  resize: vertical;
+}
+
+.modal-input:focus,
+.modal-textarea:focus {
+  border-color: #0f245b;
+}
+
+.modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.modal-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel {
+  border: 1px solid #d1d5db;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-cancel:hover {
+  background: #f9fafb;
+}
+
+.btn-save {
+  background: #0f245b;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-save:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .admin-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modal-row {
+    grid-template-columns: 1fr;
+  }
+}

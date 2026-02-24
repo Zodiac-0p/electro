@@ -1,0 +1,161 @@
+/* ===============================
+   ADMIN PRODUCT CREATE PAGE
+=================================*/
+
+.product-page {
+  min-height: 100vh;
+  /* background: #0b0f19; */
+  color: #3968dd;
+  padding: 30px 20px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+.product-container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* Header */
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.product-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.product-header p {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 5px;
+}
+
+/* Card Layout */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+/* Form Fields */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+  
+}
+
+.form-group label {
+  font-size: 12px;
+  margin-bottom: 6px;
+  opacity: 0.8;
+}
+
+.form-control {
+  padding: 10px 12px;
+  border-radius: 10px;
+  /* border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #101522; */
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: #4c6ef5;
+}
+
+/* Two Column inside card */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Checkboxes */
+.checkbox-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4c6ef5, #6610f2);
+  color: white;
+}
+
+.btn-secondary {
+  background: #2a2f3d;
+  color: white;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+/* Image Preview */
+.image-preview {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  background: #101522;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-text {
+  opacity: 0.6;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

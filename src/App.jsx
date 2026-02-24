@@ -33,7 +33,7 @@ import TrackOrder from "./pages/TrackOrder/TrackOrder";
 import PrivacyPolicy from "./pages/Info/PrivacyPolicy";
 import RefundPolicy from "./pages/Info/RefundPolicy";
 import TermsOfService from "./pages/Info/TermsOfService";
-import VerifyPhone from "./pages/auth/Verifyphone";
+import VerifyPhone from "./pages/auth/Temp";
 
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";

@@ -160,11 +160,16 @@ const ForgotPassword = () => {
         )}
 
         {/* ================= STEP 3 ================= */}
-        {step === 3 && <div className="fp-success">{msg}</div>}
+        {step === 3 && <div className="fp-success">
+           <button className="fp-login-btn" onClick={() => navigate("/login")}>
+          Back to Login
+        </button>
+          {msg}</div>}
 
         {/* ================= ERRORS ================= */}
         {error && <div className="fp-error">{error}</div>}
         {msg && step !== 3 && <div className="fp-success">{msg}</div>}
+       
       </div>
     </div>
   );

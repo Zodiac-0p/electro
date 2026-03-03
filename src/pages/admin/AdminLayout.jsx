@@ -6,11 +6,20 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const logout = () => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showLogoutMessage, setShowLogoutMessage] = useState(false);
+
+  const doLogout = () => {
     localStorage.removeItem("admin_access");
     localStorage.removeItem("admin_refresh");
     localStorage.removeItem("admin_user");
-    navigate("/admin/login");
+
+    setShowLogoutConfirm(false);
+    setShowLogoutMessage(true);
+
+    setTimeout(() => {
+      navigate("/admin/login");
+    }, 2000);
   };
 
   return (
@@ -49,7 +58,12 @@ const AdminLayout = () => {
         </nav>
 
         <div className="sidebar-footer">
-          <button className="logout-btn" onClick={logout}>
+          {/* ✅ open confirm popup (not direct logout) */}
+          <button
+            className="logout-btn"
+            onClick={() => setShowLogoutConfirm(true)}
+            disabled={showLogoutMessage}
+          >
             <span className="nav-icon">🚪</span>
             <span className="nav-label">Logout</span>
           </button>
@@ -65,6 +79,40 @@ const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* ✅ Logout Confirm Popup */}
+      {showLogoutConfirm && (
+        <div className="logout-popup">
+          <div className="logout-popup-content">
+            <h3>Are you sure?</h3>
+            <p>Do you really want to logout?</p>
+
+            <div className="logout-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowLogoutConfirm(false)}
+              >
+                Cancel
+              </button>
+
+              <button className="confirm-btn" onClick={doLogout}>
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Logout Success Message */}
+      {showLogoutMessage && (
+        <div className="logout-popup">
+          <div className="logout-popup-content">
+            <div className="logout-icon">✓</div>
+            <h3>Successfully Logged Out</h3>
+            <p>Redirecting to login page...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

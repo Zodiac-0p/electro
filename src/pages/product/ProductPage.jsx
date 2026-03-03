@@ -8,6 +8,7 @@ import {
 } from "../../services/api";
 import { useCart } from "../../context/CartContext";
 import "./ProductPage.css";
+import { FaTruck, FaMoneyBillWave, FaLock } from "react-icons/fa";
 
 const StarRating = ({ value = 0, onChange, readOnly = false }) => {
   const stars = [1, 2, 3, 4, 5];
@@ -151,161 +152,191 @@ const ProductPage = () => {
   return (
     <div className="product-page">
       <div className="product-container">
-        {/* Left */}
-        <div className="product-image-section">
-          <img src={mainImage} alt={product.name} className="product-main-image" />
-        </div>
 
-        {/* Right */}
-        <div className="product-details-section">
-          <h1 className="product-title">{product.name}</h1>
-
-          <div className="rating-row">
-            <StarRating value={Math.round(avgRating)} readOnly />
-            <span className="rating-meta">
-              {avgRating ? avgRating.toFixed(1) : "0.0"} / 5 ({reviews.length} reviews)
-            </span>
+        {/* TOP ROW: left + right */}
+        <div className="product-row">
+          {/* Left */}
+          <div className="product-image-section">
+            <img
+              src={mainImage}
+              alt={product.name}
+              className="product-main-image"
+            />
           </div>
 
-          {product.brand && (
-            <span className="product-brand">Brand: {product.brand.name}</span>
-          )}
+          {/* Right */}
+          <div className="product-details-section">
+            <h1 className="product-title">{product.name}</h1>
 
-          <div className="product-pricing">
-            <span className="price">₹{parseFloat(product.price).toFixed(2)}</span>
-            {product.discount_price && (
-              <span className="discount-price">
-                ₹{parseFloat(product.discount_price).toFixed(2)}
+            <div className="rating-row">
+              <StarRating value={Math.round(avgRating)} readOnly />
+              <span className="rating-meta">
+                {avgRating ? avgRating.toFixed(1) : "0.0"} / 5 ({reviews.length} reviews)
               </span>
-            )}
-          </div>
-
-          <div className="product-stock">
-            {product.stock > 0 ? (
-              <span className="in-stock">In Stock ({product.stock})</span>
-            ) : (
-              <span className="out-stock">Out of Stock</span>
-            )}
-          </div>
-
-          {product.stock > 0 && (
-            <div className="quantity-selector">
-              <button
-                onClick={() => setQuantity(Math.max(quantity - 1, 1))}
-                className="quantity-btn"
-              >
-                -
-              </button>
-
-              <input
-                type="number"
-                value={quantity}
-                min="1"
-                onChange={(e) =>
-                  setQuantity(Math.max(parseInt(e.target.value) || 1, 1))
-                }
-                className="quantity-input"
-              />
-
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="quantity-btn"
-              >
-                +
-              </button>
             </div>
-          )}
 
-          <button
-            className="add-to-cart-btn"
-            onClick={() => addToCart(product, quantity)}
-            disabled={product.stock <= 0}
-          >
-            Add to Cart
-          </button>
-          <p className="product-description"><b><u>Description</u></b><br>
-          </br>{product.description}</p>
-          
-          {/* ✅ Reviews */}
-          <div className="reviews-section">
-            <h2 className="section-title">Ratings & Reviews</h2>
+            {product.brand && (
+              <span className="product-brand">Brand: {product.brand.name}</span>
+            )}
 
-            <form className="review-form" onSubmit={handleSubmitReview}>
-              <label className="label">Your rating</label>
-              <StarRating value={reviewRating} onChange={setReviewRating} />
-
-              <label className="label">Your comment</label>
-              <textarea
-                className="review-textarea"
-                rows="4"
-                value={reviewComment}
-                onChange={(e) => setReviewComment(e.target.value)}
-                placeholder="Write your review here..."
-              />
-
-              {reviewError && <p className="error small">{reviewError}</p>}
-
-              <button className="review-submit" disabled={reviewSubmitting}>
-                {reviewSubmitting ? "Submitting..." : "Post Review"}
-              </button>
-            </form>
-
-            <div className="review-list">
-              {reviewsLoading ? (
-                <p className="muted">Loading reviews...</p>
-              ) : reviews.length === 0 ? (
-                <p className="muted">No reviews yet.</p>
-              ) : (
-                reviews.map((r) => (
-                  <div className="review-card" key={r.id}>
-                    <div className="review-top">
-                      <StarRating value={Number(r.rating) || 0} readOnly />
-                      <span className="review-user">
-                        {r.user?.username || r.user_name || "User"}
-                      </span>
-                      <span className="review-date">
-                        {r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}
-                      </span>
-                    </div>
-                    <p className="review-comment">{r.comment}</p>
-                  </div>
-                ))
+            <div className="product-pricing">
+              <span className="price">₹{parseFloat(product.price).toFixed(2)}</span>
+              {product.discount_price && (
+                <span className="discount-price">
+                  ₹{parseFloat(product.discount_price).toFixed(2)}
+                </span>
               )}
             </div>
-          </div>
 
-          {/* ✅ Suggested */}
-          <div className="suggested-section">
-            <h2 className="section-title">Related Products</h2>
+            <div className="product-stock">
+              {product.stock > 0 ? (
+                <span className="in-stock">In Stock ({product.stock})</span>
+              ) : (
+                <span className="out-stock">Out of Stock</span>
+              )}
+            </div>
 
-            {suggestedLoading ? (
-              <p className="muted">Loading suggestions...</p>
-            ) : suggested.length === 0 ? (
-              <p className="muted">No suggestions.</p>
-            ) : (
-              <div className="suggested-grid">
-                {suggested.map((p) => {
-                  const img =
-                    p.images?.length > 0
-                      ? p.images[0].image
-                      : "https://via.placeholder.com/280x200?text=No+Image";
+            {product.stock > 0 && (
+              <div className="quantity-selector">
+                <button
+                  onClick={() => setQuantity(Math.max(quantity - 1, 1))}
+                  className="quantity-btn"
+                >
+                  -
+                </button>
 
-                  return (
-                    <Link key={p.id} to={`/products/${p.id}`} className="suggested-card">
-                      <img src={img} alt={p.name} className="suggested-img" />
-                      <div className="suggested-info">
-                        <div className="suggested-name">{p.name}</div>
-                        <div className="suggested-price">
-                          ₹{parseFloat(p.price).toFixed(2)}
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+                <input
+                  type="number"
+                  value={quantity}
+                  min="1"
+                  onChange={(e) =>
+                    setQuantity(Math.max(parseInt(e.target.value) || 1, 1))
+                  }
+                  className="quantity-input"
+                />
+
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="quantity-btn"
+                >
+                  +
+                </button>
               </div>
             )}
+
+            <button
+              className="add-to-cart-btn"
+              onClick={() => addToCart(product, quantity)}
+              disabled={product.stock <= 0}
+            >
+              Add to Cart
+            </button>
+
+            <p className="product-description">
+              <b><u>Description</u></b>
+              <br />
+              {product.description}
+            </p>
+
+            <div className="product-badges">
+              <div className="badge-item">
+                <FaTruck className="badge-icon" />
+                <p>Free Delivery</p>
+              </div>
+
+              <div className="badge-item">
+                <FaMoneyBillWave className="badge-icon" />
+                <p>Cash on Delivery</p>
+              </div>
+
+              <div className="badge-item">
+                <FaLock className="badge-icon" />
+                <p>Secure Payment</p>
+              </div>
+            </div>
+
+            {/* ✅ Reviews */}
+            <div className="reviews-section">
+              <h2 className="section-title">Ratings & Reviews</h2>
+
+              <form className="review-form" onSubmit={handleSubmitReview}>
+                <label className="label">Your rating</label>
+                <StarRating value={reviewRating} onChange={setReviewRating} />
+
+                <label className="label">Your comment</label>
+                <textarea
+                  className="review-textarea"
+                  rows="4"
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Write your review here..."
+                />
+
+                {reviewError && <p className="error small">{reviewError}</p>}
+
+                <button className="review-submit" disabled={reviewSubmitting}>
+                  {reviewSubmitting ? "Submitting..." : "Post Review"}
+                </button>
+              </form>
+
+              <div className="review-list">
+                {reviewsLoading ? (
+                  <p className="muted">Loading reviews...</p>
+                ) : reviews.length === 0 ? (
+                  <p className="muted">No reviews yet.</p>
+                ) : (
+                  reviews.map((r) => (
+                    <div className="review-card" key={r.id}>
+                      <div className="review-top">
+                        <StarRating value={Number(r.rating) || 0} readOnly />
+                        <span className="review-user">
+                          {r.user?.username || r.user_name || "User"}
+                        </span>
+                        <span className="review-date">
+                          {r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}
+                        </span>
+                      </div>
+                      <p className="review-comment">{r.comment}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* ✅ Related Products FULL WIDTH (still inside product card) */}
+        <div className="suggested-section fullwidth-related">
+          <h2 className="section-title">Related Products</h2>
+
+          {suggestedLoading ? (
+            <p className="muted">Loading suggestions...</p>
+          ) : suggested.length === 0 ? (
+            <p className="muted">No suggestions.</p>
+          ) : (
+            <div className="suggested-grid">
+              {suggested.map((p) => {
+                const img =
+                  p.images?.length > 0
+                    ? p.images[0].image
+                    : "https://via.placeholder.com/280x200?text=No+Image";
+
+                return (
+                  <Link key={p.id} to={`/products/${p.id}`} className="suggested-card">
+                    <img src={img} alt={p.name} className="suggested-img" />
+                    <div className="suggested-info">
+                      <div className="suggested-name">{p.name}</div>
+                      <div className="suggested-price">
+                        ₹{parseFloat(p.price).toFixed(2)}
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

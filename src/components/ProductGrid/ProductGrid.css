@@ -11,11 +11,14 @@
 /* ================= PRODUCT GRID ================= */
 
 .pg-product-grid {
+  /* ✅ Center + screen side gap */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 60px; /* ✅ LEFT + RIGHT GAP ADDED */
+
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ✅ 4 in a row */
-  grid-auto-rows: 1fr;                  /* ✅ equal height rows */
+  grid-template-columns: repeat(4, 1fr);
   gap: 22px;
-  padding: 20px 0;
   align-items: stretch;
 }
 
@@ -53,7 +56,7 @@
 /* ================= PRODUCT CARD ================= */
 
 .pg-product-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 16px;
   padding: 16px;
 
@@ -82,13 +85,14 @@
 .pg-product-image-container {
   width: 100%;
   height: 180px;
-  background: var(--blue-light);
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 14px;
   overflow: hidden;
+  background: #fff;
+  border: 1px solid #f0f2f5;
 }
 
 .pg-product-image {
@@ -123,7 +127,7 @@
   margin-bottom: 8px;
   line-height: 1.3;
 
-  min-height: 40px; /* ✅ align */
+  min-height: 40px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -137,7 +141,7 @@
   line-height: 1.35;
   margin-bottom: 10px;
 
-  min-height: 36px; /* ✅ align */
+  min-height: 36px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -187,7 +191,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: auto; /* ✅ stick bottom */
+  margin-top: auto;
 }
 
 .pg-quantity-selector {
@@ -225,7 +229,7 @@
 .pg-add-to-cart-btn {
   flex: 1;
   background: linear-gradient(135deg, var(--blue), #0b1122);
-  color: white;
+  color: #fff;
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -246,31 +250,9 @@
   box-shadow: none;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= PAGINATION ================= */
 
-@media (max-width: 1200px) {
-  .pg-product-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .pg-product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 520px) {
-  .pg-product-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pg-product-image-container {
-    height: 150px;
-  }
-}
-
-.pagination{
+.pagination {
   margin-top: 18px;
   display: flex;
   justify-content: center;
@@ -278,7 +260,7 @@
   gap: 12px;
 }
 
-.pagination button{
+.pagination button {
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
@@ -287,12 +269,104 @@
   font-weight: 600;
 }
 
-.pagination button:disabled{
+.pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.page-info{
+.page-info {
   font-size: 14px;
   color: #374151;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1200px) {
+  .pg-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 20px 40px; /* ✅ smaller screen side gap */
+  }
+}
+
+@media (max-width: 900px) {
+  .pg-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 16px 24px;
+  }
+}
+
+/* ✅ Flipkart-like compact mobile cards */
+@media (max-width: 520px) {
+  .pg-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px 14px; /* ✅ mobile side gap */
+  }
+
+  .pg-product-card {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .pg-product-image-container {
+    height: 120px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .pg-brand {
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+
+  .pg-product-name {
+    font-size: 13px;
+    min-height: 34px;
+    margin-bottom: 6px;
+  }
+
+  /* ✅ Hide description like Flipkart */
+  .pg-product-description {
+    display: none;
+  }
+
+  .pg-product-price {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .pg-stock-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+  }
+
+  .pg-cart-actions {
+    gap: 6px;
+  }
+
+  .pg-quantity-selector {
+    border-radius: 8px;
+  }
+
+  .pg-quantity-input {
+    width: 34px;
+    padding: 4px;
+    font-size: 13px;
+  }
+
+  .pg-quantity-btn {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .pg-add-to-cart-btn {
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .pg-tax {
+    font-size: 10px;
+  }
 }

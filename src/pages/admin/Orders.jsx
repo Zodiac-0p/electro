@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import adminApi from "../../services/adminApi";
 import "./Orders.css";
 
@@ -10,6 +10,9 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
 
   const [selectedOrder, setSelectedOrder] = useState(null); // ✅ modal data
+  const [statusFilter, setStatusFilter] = useState(""); // Filter by status
+  const [sortBy, setSortBy] = useState("id"); // Sort field
+  const [sortOrder, setSortOrder] = useState("desc"); // Sort direction
 
   useEffect(() => {
     loadOrders("users/orders/");
@@ -44,6 +47,44 @@ const Orders = () => {
     setSelectedOrder((prev) => (prev?.id === id ? { ...prev, status } : prev));
   };
 
+  // Filter and Sort
+  const filteredAndSortedOrders = useMemo(() => {
+    let filtered = orders;
+
+    // Status filter
+    if (statusFilter) {
+      filtered = orders.filter((o) => o.status === statusFilter);
+    }
+
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      let aVal, bVal;
+      if (sortBy === "user") {
+        aVal = (a.user_email || "").toLowerCase();
+        bVal = (b.user_email || "").toLowerCase();
+      } else if (sortBy === "date") {
+        aVal = new Date(a.created_at).getTime();
+        bVal = new Date(b.created_at).getTime();
+      } else if (sortBy === "total") {
+        aVal = a.total_amount || 0;
+        bVal = b.total_amount || 0;
+      } else if (sortBy === "status") {
+        aVal = (a.status || "").toLowerCase();
+        bVal = (b.status || "").toLowerCase();
+      } else {
+        // id (default)
+        aVal = a.id || 0;
+        bVal = b.id || 0;
+      }
+
+      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return sorted;
+  }, [orders, statusFilter, sortBy, sortOrder]);
+
   if (loading) return <p>Loading orders...</p>;
 
   return (
@@ -53,8 +94,52 @@ const Orders = () => {
         <p>Total Orders: <b>{count}</b></p>
       </div>
 
+      {/* Filter & Sort Toolbar */}
+      <div className="admin-toolbar">
+        <div className="filter-wrap">
+          <label className="filter-label">Filter by Status:</label>
+          <select
+            className="filter-select"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div className="sort-wrap">
+          <label className="sort-label">Sort by:</label>
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="id">ID</option>
+            <option value="date">Date</option>
+            <option value="user">User</option>
+            <option value="total">Total</option>
+            <option value="status">Status</option>
+          </select>
+
+          <button
+            className="btn btn-secondary sort-btn"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            title={`Sorted ${sortOrder === "asc" ? "ascending" : "descending"}`}
+          >
+            {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
+          </button>
+        </div>
+      </div>
+
       {orders.length === 0 ? (
         <p>No orders found.</p>
+      ) : filteredAndSortedOrders.length === 0 ? (
+        <p>No matching orders found.</p>
       ) : (
         <div className="orders-table-wrap">
           <table className="orders-table">
@@ -71,7 +156,7 @@ const Orders = () => {
             </thead>
 
             <tbody>
-              {orders.map((order) => {
+              {filteredAndSortedOrders.map((order) => {
                 const paymentText = order.payment
                   ? `${order.payment.payment_method} (${order.payment.status})`
                   : "COD";

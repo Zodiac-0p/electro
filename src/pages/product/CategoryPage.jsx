@@ -1,25 +1,16 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import ProductGrid from "../../components/ProductGrid/ProductGrid";
-import { fetchProductsByCategory } from "../../services/api";
+import { fetchProductsByCategory, fetchCategories } from "../../services/api";
 import "./CategoryPage.css";
 
-// Category names mapping to display to user
-const categoryNames = {
-  1: "DEV BOARDS",
-  2: "BATTERIES",
-  3: "COMPONENTS",
-  4: "ICS",
-  5: "SENSORS",
-  6: "MODULES",
-  7: "TOOLS",
-  8: "RESISTOR",
-  9: "TRANSISTOR",
-};
 
 const CategoryPage = () => {
   const { categoryId } = useParams();
   const [allProducts, setAllProducts] = useState([]);
+  const [categoryName, setCategoryName] = useState(`Category ${categoryId}`);
+  const [categories, setCategories] = useState([]); // top-level categories for nav
+  const [catsLoading, setCatsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
@@ -28,6 +19,42 @@ const CategoryPage = () => {
   useEffect(() => {
     setPage(1);
   }, [categoryId]);
+
+  useEffect(() => {
+    const loadName = async () => {
+      try {
+        // fetch flat list so we can find any category by id
+        const data = await fetchCategories(true);
+        const list = data.results || data || [];
+        const found = list.find((c) => String(c.id) === String(categoryId));
+        if (found) setCategoryName(found.name);
+        else setCategoryName(`Category ${categoryId}`);
+      } catch (err) {
+        setCategoryName(`Category ${categoryId}`);
+      }
+    };
+
+    if (categoryId) loadName();
+  }, [categoryId]);
+
+  // load top-level categories (includes children)
+  useEffect(() => {
+    const loadCats = async () => {
+      try {
+        setCatsLoading(true);
+        const data = await fetchCategories(); // default returns top-level with children
+        const list = data.results || data || [];
+        setCategories(list);
+      } catch (err) {
+        console.error("Error loading categories:", err);
+        setCategories([]);
+      } finally {
+        setCatsLoading(false);
+      }
+    };
+
+    loadCats();
+  }, []);
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
@@ -69,12 +96,30 @@ const CategoryPage = () => {
     return arr;
   };
 
-  const categoryName = categoryNames[categoryId] || `Category ${categoryId}`;
+  // categoryName state is used above
 
   return (
     <div className="category-page-container">
       <div className="container">
         <h1 className="category-page-title">{categoryName}</h1>
+
+        <div className="category-list">
+          {catsLoading ? (
+            <p className="loading-text">Loading categories...</p>
+          ) : (
+            <div className="category-chips">
+              {categories.map((c) => (
+                <a
+                  key={c.id}
+                  href={`/category/${c.id}`}
+                  className={`category-chip ${String(c.id) === String(categoryId) ? "active" : ""}`}
+                >
+                  {c.name}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
 
         {loading && <p className="loading-text">Loading products...</p>}
         {error && <p className="error-text">Error: {error}</p>}

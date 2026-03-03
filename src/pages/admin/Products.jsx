@@ -13,6 +13,8 @@ const Products = () => {
   const [error, setError] = useState("");
 
   const [q, setQ] = useState("");
+  const [sortBy, setSortBy] = useState("id"); // Sort field
+  const [sortOrder, setSortOrder] = useState("asc"); // Sort direction
 
   // ✅ EDIT MODAL STATES
   const [editOpen, setEditOpen] = useState(false);
@@ -77,10 +79,38 @@ const Products = () => {
 
   // ✅ frontend search
   const filteredProducts = useMemo(() => {
+    // Filter by search query
+    let filtered = products;
     const text = q.trim().toLowerCase();
-    if (!text) return products;
-    return products.filter((p) => (p.name || "").toLowerCase().includes(text));
-  }, [products, q]);
+    if (text) {
+      filtered = products.filter((p) => (p.name || "").toLowerCase().includes(text));
+    }
+
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      let aVal, bVal;
+      if (sortBy === "name") {
+        aVal = (a.name || "").toLowerCase();
+        bVal = (b.name || "").toLowerCase();
+      } else if (sortBy === "price") {
+        aVal = a.price ?? 0;
+        bVal = b.price ?? 0;
+      } else if (sortBy === "stock") {
+        aVal = a.stock ?? 0;
+        bVal = b.stock ?? 0;
+      } else {
+        // id (default)
+        aVal = a.id || 0;
+        bVal = b.id || 0;
+      }
+
+      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return sorted;
+  }, [products, q, sortBy, sortOrder]);
 
   // ✅ OPEN EDIT MODAL
   const openEdit = (product) => {
@@ -211,7 +241,7 @@ const Products = () => {
         </div>
       </div>
 
-      {/* Search + refresh */}
+      {/* Search + refresh + sort */}
       <div className="toolbar">
         <div className="search-wrap">
           <input
@@ -225,6 +255,27 @@ const Products = () => {
               Clear
             </button>
           )}
+        </div>
+
+        <div className="sort-wrap">
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="id">Sort by ID</option>
+            <option value="name">Sort by Name</option>
+            <option value="price">Sort by Price</option>
+            <option value="stock">Sort by Stock</option>
+          </select>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            title={`Sorted ${sortOrder === "asc" ? "ascending" : "descending"}`}
+          >
+            {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
+          </button>
         </div>
 
         <button

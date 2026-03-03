@@ -44,6 +44,10 @@ export const apiFetch = async (
       const refreshToken = localStorage.getItem("refreshToken");
 
       if (!refreshToken) {
+        // logout cleanly
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
         window.location.href = "/login";
         return null;
       }
@@ -56,7 +60,10 @@ export const apiFetch = async (
 
       if (refreshResponse.ok) {
         const refreshData = await refreshResponse.json();
+
+        // ✅ store new access token
         localStorage.setItem("accessToken", refreshData.access);
+        accessToken = refreshData.access;
 
         headers["Authorization"] = `Bearer ${refreshData.access}`;
 
@@ -70,6 +77,7 @@ export const apiFetch = async (
       } else {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
         window.location.href = "/login";
         return null;
       }
@@ -102,8 +110,85 @@ export const apiFetch = async (
 };
 
 // ======================= USER AUTH =======================
-export const loginUser = (identifier, password) =>
-  apiFetch("/user/login/", "POST", { identifier, password });
+
+// ✅ helper
+export const isLoggedIn = () => !!localStorage.getItem("accessToken");
+
+// ✅ Save tokens safely (supports different response shapes)
+const saveTokens = (data) => {
+  const access =
+    data?.access ||
+    data?.accessToken ||
+    data?.tokens?.access ||
+    data?.data?.access;
+
+  const refresh =
+    data?.refresh ||
+    data?.refreshToken ||
+    data?.tokens?.refresh ||
+    data?.data?.refresh;
+
+  if (access) localStorage.setItem("accessToken", access);
+  if (refresh) localStorage.setItem("refreshToken", refresh);
+
+  if (data?.user) localStorage.setItem("user", JSON.stringify(data.user));
+
+  return { access, refresh };
+};
+
+// ✅ Ensure user is stored even if login response doesn't include user
+const ensureUserStored = async () => {
+  try {
+    const existing = localStorage.getItem("user");
+    if (existing) return JSON.parse(existing);
+
+    // /user/me/ should return user profile
+    const me = await apiFetch("/user/me/", "GET", null, true);
+    if (me) localStorage.setItem("user", JSON.stringify(me));
+    return me;
+  } catch (e) {
+    console.error("ensureUserStored failed:", e);
+    return null;
+  }
+};
+
+// ✅ UPDATED: login + save tokens + ensure user
+export const loginUser = async (identifier, password) => {
+  const data = await apiFetch("/user/login/", "POST", { identifier, password });
+
+  console.log("LOGIN RESPONSE =", data);
+
+  const { access } = saveTokens(data);
+
+  console.log("SAVED accessToken =", localStorage.getItem("accessToken"));
+  console.log("SAVED refreshToken =", localStorage.getItem("refreshToken"));
+
+  if (access && !localStorage.getItem("user")) {
+    await ensureUserStored();
+  }
+
+  console.log("SAVED user =", localStorage.getItem("user"));
+  return data;
+};
+
+// ✅ Google login (Firebase ID token -> Django JWT) + ensure user
+export const googleLogin = async (token) => {
+  const data = await apiFetch("/user/google-login/", "POST", { token }, false);
+
+  console.log("GOOGLE LOGIN RESPONSE =", data);
+
+  const { access } = saveTokens(data);
+
+  console.log("SAVED accessToken =", localStorage.getItem("accessToken"));
+  console.log("SAVED refreshToken =", localStorage.getItem("refreshToken"));
+
+  if (access && !localStorage.getItem("user")) {
+    await ensureUserStored();
+  }
+
+  console.log("SAVED user =", localStorage.getItem("user"));
+  return data;
+};
 
 export const signupUser = (data) => apiFetch("/user/register/", "POST", data);
 
@@ -112,6 +197,9 @@ export const logoutUser = async () => {
   const access = localStorage.getItem("accessToken");
 
   if (!refresh || !access) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
     return { message: "No tokens found" };
   }
 
@@ -119,6 +207,7 @@ export const logoutUser = async () => {
 
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("user");
   return response;
 };
 
@@ -134,7 +223,8 @@ export const fetchProducts = async ({ page = 1, page_size = 12 } = {}) => {
 
 export const fetchProductById = (id) => apiFetch(`/catalog/products/${id}/`);
 
-export const fetchCategories = () => apiFetch("/catalog/categories/");
+export const fetchCategories = (all = false) =>
+  apiFetch(`/catalog/categories/${all ? "?all=true" : ""}`);
 
 export const fetchProductsByCategory = (categoryId) =>
   apiFetch(`/catalog/products/?category=${encodeURIComponent(categoryId)}`);
@@ -145,19 +235,14 @@ export const searchProducts = (query, categoryId = "", limit = 5) => {
   return apiFetch(url);
 };
 
-// ======================= REVIEWS (✅ NEW) =======================
-// Requires backend endpoints:
-// GET  /catalog/products/<id>/reviews/
-// POST /catalog/products/<id>/reviews/
+// ======================= REVIEWS =======================
 export const fetchReviewsByProduct = (productId) =>
   apiFetch(`/catalog/products/${productId}/reviews/`, "GET", null, false);
 
 export const createReview = (productId, payload) =>
   apiFetch(`/catalog/products/${productId}/reviews/`, "POST", payload, true);
 
-// ======================= SUGGESTED PRODUCTS (✅ NEW) =======================
-// Uses same products list endpoint with category filter + exclude param
-// Backend should support ?exclude=<id> (if not, we can filter in frontend)
+// ======================= SUGGESTED PRODUCTS =======================
 export const fetchSuggestedProducts = ({ categoryId, excludeId, limit = 8 }) =>
   apiFetch(
     `/catalog/products/?category=${encodeURIComponent(categoryId)}&exclude=${encodeURIComponent(
@@ -256,18 +341,22 @@ export const handleSelectAddress = (
     setSelectedShippingId(address.id);
   }
 };
+// ✅ PHONE LOGIN (public endpoints)
+export const phoneLoginSendOtp = (phone_number) =>
+  apiFetch("/user/phone/login/send-otp/", "POST", { phone_number }, false);
+
+export const phoneLoginVerifyOtp = (phone_number, otp) =>
+  apiFetch("/user/phone/login/verify-otp/", "POST", { phone_number, otp }, false);
 
 // ======================= CART =======================
-// Guest + Auth supported
-export const getCart = async () => {
-  return await apiFetch("/user/cart/", "GET", null, false);
-};
+// ✅ IMPORTANT: These MUST be auth=true after login
+export const getCart = async () => apiFetch("/user/cart/", "GET", null, true);
 
 export const addToCart = (productId, quantity = 1) =>
-  apiFetch("/user/cart/add/", "POST", { product: productId, quantity }, false);
+  apiFetch("/user/cart/add/", "POST", { product: productId, quantity }, true);
 
 export const removeCartItem = (itemId) =>
-  apiFetch(`/user/cart/remove/${itemId}/`, "DELETE", null, false);
+  apiFetch(`/user/cart/remove/${itemId}/`, "DELETE", null, true);
 
 // ======================= ORDERS =======================
 export const fetchOrders = () => apiFetch("/user/orders/", "GET", null, true);

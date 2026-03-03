@@ -39,20 +39,40 @@ function Header() {
   const { cartCount } = useCart();
   const navigate = useNavigate();
 
-  // ------------------- LOAD INITIAL DATA -----------------
-  useEffect(() => {
-    const loginState = localStorage.getItem("isLoggedIn");
+  // ✅ NEW: sync auth state from the REAL keys your login saves
+  const syncAuthState = () => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    const storedUsername = localStorage.getItem("username");
 
-    setIsLoggedIn(loginState === "true" && !!accessToken && !!refreshToken);
-    setUsername(storedUsername || "");
+    const logged = !!accessToken && !!refreshToken;
+    setIsLoggedIn(logged);
 
-    const msg = localStorage.getItem("loginMessage");
+    // username from "user" JSON (fallbacks included)
+    let name = "";
+    try {
+      const u = JSON.parse(localStorage.getItem("user") || "null");
+      name =
+        u?.first_name ||
+        u?.username ||
+        u?.name ||
+        u?.email?.split?.("@")?.[0] ||
+        "";
+    } catch {
+      name = "";
+    }
+    setUsername(name);
+  };
+
+  // ------------------- LOAD INITIAL DATA -----------------
+  useEffect(() => {
+    // ✅ sync login state on mount
+    syncAuthState();
+
+    // ✅ your Login.jsx uses "loginSuccessMsg"
+    const msg = localStorage.getItem("loginSuccessMsg");
     if (msg) {
       setLoginMessage(msg);
-      localStorage.removeItem("loginMessage");
+      localStorage.removeItem("loginSuccessMsg");
       setTimeout(() => setLoginMessage(""), 2000);
     }
 
@@ -70,18 +90,16 @@ function Header() {
     loadCategories();
   }, []);
 
-  // Sync username (your existing logic)
+  // ✅ Keep syncing username/login across tabs and updates
   useEffect(() => {
-    const syncUsername = () => {
-      const storedUsername = localStorage.getItem("username");
-      setUsername(storedUsername || "");
-    };
+    const onStorage = () => syncAuthState();
+    window.addEventListener("storage", onStorage);
 
-    window.addEventListener("storage", syncUsername);
-    const interval = setInterval(syncUsername, 500);
+    // keep your existing interval-style syncing
+    const interval = setInterval(syncAuthState, 500);
 
     return () => {
-      window.removeEventListener("storage", syncUsername);
+      window.removeEventListener("storage", onStorage);
       clearInterval(interval);
     };
   }, []);
@@ -109,30 +127,24 @@ function Header() {
     if (!window.confirm("Are you sure you want to logout?")) return;
 
     try {
-      const response = await logoutUser();
-      if (response?.message === "Successfully logged out") {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("username");
-        setIsLoggedIn(false);
-        setLogoutMessage("Logout successful.");
-        setTimeout(() => {
-          setLogoutMessage("");
-          navigate("/");
-        }, 1500);
-      } else if (response?.detail === "Given token not valid for any token type") {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("username");
-        setIsLoggedIn(false);
-        setLogoutMessage("Session expired. Please login again.");
-        setTimeout(() => {
-          setLogoutMessage("");
-          navigate("/account/login");
-        }, 1500);
-      } else {
-        console.error("Logout failed:", response.message || response.detail || response);
-      }
+      await logoutUser();
     } catch (err) {
       console.error("Logout failed:", err);
+    } finally {
+      // ✅ always clear auth keys
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+
+      setIsLoggedIn(false);
+      setUsername("");
+
+      setLogoutMessage("Logout successful.");
+      setTimeout(() => {
+        setLogoutMessage("");
+        navigate("/");
+        window.location.reload();
+      }, 800);
     }
   };
 
@@ -188,13 +200,16 @@ function Header() {
           <span className="top-bar-left">
             <Mail size={14} /> sales@ElectroBoards.com
           </span>
-          <span className="top-bar-center">Min Order value ₹99 | Free delivery above ₹1500</span>
-     {isLoggedIn && (
-  <Link to="/track-order" className="top-bar-link">
-    <Truck size={20} />
-    Track Order
-  </Link>
-)}
+          <span className="top-bar-center">
+            Min Order value ₹99 | Free delivery above ₹1500
+          </span>
+
+          {isLoggedIn && (
+            <Link to="/track-order" className="top-bar-link">
+              <Truck size={20} />
+              Track Order
+            </Link>
+          )}
         </div>
       </div>
 
@@ -220,6 +235,7 @@ function Header() {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             />
+
             <select
               className="search-category-select"
               value={selectedCategory}
@@ -270,7 +286,7 @@ function Header() {
             >
               <span className="account-title">
                 <User size={18} />
-                {isLoggedIn ? ` Hello, ${username}` : " My Account "}
+                {isLoggedIn ? ` Hello, ${username || "User"}` : " My Account "}
                 <ChevronDown size={14} />
               </span>
 
@@ -286,7 +302,10 @@ function Header() {
                     <>
                       <Link to="/account/orders">My Orders</Link>
                       <Link to="/account/profile">Profile</Link>
+
+                      {/* ✅ You had this */}
                       <Link to="/forgot-password">Change password</Link>
+
                       <span onClick={handleLogout} className="logout-link">
                         Logout
                       </span>
@@ -295,13 +314,12 @@ function Header() {
                 </div>
               )}
             </div>
+
             {isLoggedIn && (
-              <>
-            <Link to="/cart" className="cart-link">
-              <ShoppingCart size={18} /> Cart
-              {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
-            </Link>
-            </>
+              <Link to="/cart" className="cart-link">
+                <ShoppingCart size={18} /> Cart
+                {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+              </Link>
             )}
           </div>
         </div>
@@ -333,7 +351,7 @@ function Header() {
               onMouseLeave={() => setIsCategoriesOpen(false)}
             >
               <span>
-                Categories <ChevronDown size={14} />
+                <b>Categories</b> <ChevronDown size={14} />
               </span>
               {isCategoriesOpen && (
                 <div className="dropdown-menu">
@@ -353,7 +371,8 @@ function Header() {
             </div>
 
             {/* Services Dropdown */}
-            <div
+
+            {/* <div
               className="dropdown-nav-item"
               onMouseEnter={() => setIsServicesOpen(true)}
               onMouseLeave={() => setIsServicesOpen(false)}
@@ -368,10 +387,11 @@ function Header() {
                   <Link to="/services/custom">Custom Solutions</Link>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Blogs Dropdown */}
-            <div
+
+            {/* <div
               className="dropdown-nav-item"
               onMouseEnter={() => setIsBlogsOpen(true)}
               onMouseLeave={() => setIsBlogsOpen(false)}
@@ -385,7 +405,7 @@ function Header() {
                   <Link to="/blogs/guides">How-to Guides</Link>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Information Dropdown */}
             <div
@@ -394,7 +414,7 @@ function Header() {
               onMouseLeave={() => setIsInformationOpen(false)}
             >
               <span>
-                Information <ChevronDown size={14} />
+                <b>Information</b> <ChevronDown size={14} />
               </span>
               {isInformationOpen && (
                 <div className="dropdown-menu">
@@ -457,7 +477,8 @@ function Header() {
               )}
 
               {/* Services */}
-              <button
+
+              {/* <button
                 className="m-collapsible"
                 onClick={() => setMServicesOpen(!mServicesOpen)}
                 type="button"
@@ -476,10 +497,11 @@ function Header() {
                     Custom Solutions
                   </Link>
                 </div>
-              )}
+              )} */}
 
               {/* Blogs */}
-              <button
+
+              {/* <button
                 className="m-collapsible"
                 onClick={() => setMBlogsOpen(!mBlogsOpen)}
                 type="button"
@@ -495,7 +517,7 @@ function Header() {
                     How-to Guides
                   </Link>
                 </div>
-              )}
+              )} */}
 
               {/* Information */}
               <button

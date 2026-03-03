@@ -1,4 +1,3 @@
-// src/pages/About/About.jsx (or src/pages/About.jsx based on your structure)
 import React from "react";
 import "./About.css";
 

@@ -135,6 +135,7 @@
 }
 
 .account-title {
+  color: #0f245b !important;
   font-weight: 600;
   color: var(--blue);
   display: flex;
@@ -234,6 +235,17 @@
   gap: 6px;
 }
 
+/* ✅ FIX: Force same color for ALL bottom nav links in ALL states */
+.bottom-nav a,
+.bottom-nav a:link,
+.bottom-nav a:visited,
+.bottom-nav a:hover,
+.bottom-nav a:active {
+  color: #ffffff;
+  text-decoration: none;
+  
+}
+
 /* Nav Items */
 .nav-item,
 .dropdown-nav-item {
@@ -244,10 +256,20 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  
 }
 
+/* ✅ Also keep dropdown label span white */
+.dropdown-nav-item > span {
+  color: #ffffff;
+}
+
+/* Hover */
 .nav-item:hover,
 .dropdown-nav-item:hover {
+  color: var(--orange);
+}
+.dropdown-nav-item:hover > span {
   color: var(--orange);
 }
 
@@ -271,6 +293,7 @@
 }
 
 /* Show on hover */
+/* Show when OPEN (click) */
 .dropdown-nav-item:hover .dropdown-menu {
   display: flex;
   opacity: 1;
@@ -278,7 +301,7 @@
 }
 
 .dropdown-menu a {
-  color: var(--text);
+  color: var(--text) !important;
   padding: 10px 15px;
   text-decoration: none;
   border-bottom: 1px solid var(--border);
@@ -290,7 +313,7 @@
 
 .dropdown-menu a:hover {
   background: var(--blue-light);
-  color: var(--orange);
+  color: var(--orange) !important;
 }
 
 /* 🔍 Search Suggestions */
@@ -331,6 +354,20 @@
   height: 30px;
   object-fit: cover;
   border-radius: 6px;
+}
+/* ✅ FIX: Mobile drawer links were turning white because .bottom-nav a { color: #fff } */
+.bottom-nav .mobile-drawer a,
+.bottom-nav .mobile-drawer .m-link,
+.bottom-nav .mobile-drawer .m-submenu .m-link {
+  color: #111 !important;
+}
+
+.bottom-nav .mobile-drawer .m-collapsible {
+  color: #111 !important;
+}
+
+.bottom-nav .mobile-drawer .close-btn {
+  color: #111 !important;
 }
 
 /* =========================================
@@ -474,6 +511,7 @@
   font-weight: 700;
   cursor: pointer;
   padding: 8px 10px;
+  color: #fff; /* ✅ ensure visible */
 }
 
 /* Drawer overlay */
@@ -501,7 +539,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 800;
+  font-weight: 600;
+  font-size: 16px;
   margin-bottom: 12px;
 }
 
@@ -519,7 +558,7 @@
   text-decoration: none;
   color: #222;
   border-radius: 8px;
-  font-weight: 400;   /* Normal weight */
+  font-weight: 400; /* Normal weight */
   font-size: 14px;
 }
 
@@ -534,7 +573,7 @@
   padding: 10px 10px;
   border: none;
   background: transparent;
-  font-weight: 500;   /* Slightly stronger than links */
+  font-weight: 500; /* Slightly stronger than links */
   font-size: 14px;
   cursor: pointer;
   display: flex;
@@ -563,6 +602,7 @@
     gap: 8px;
   }
 }
+
 .mobile-drawer-header {
   font-weight: 600;
   font-size: 16px;
@@ -572,5 +612,3 @@
   font-size: 13px;
   color: #555;
 }
-
-

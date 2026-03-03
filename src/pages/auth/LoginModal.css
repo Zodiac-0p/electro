@@ -1,0 +1,193 @@
+.lm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.lm-modal {
+  width: min(900px, 92vw);
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.lm-close {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lm-body {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 360px;
+}
+
+/* Left side (Flipkart-ish) */
+.lm-left {
+  padding: 36px;
+  background: #0f245b; /* match your theme blue */
+  color: #fff;
+}
+
+.lm-left h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.lm-left p {
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Right side */
+.lm-right {
+  padding: 36px;
+}
+
+.lm-right label {
+  display: block;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  font-size: 14px;
+}
+
+.lm-right input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  outline: none;
+}
+
+.lm-right input:focus {
+  border-color: #0f245b;
+}
+
+.lm-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #f35005; /* your orange */
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lm-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.lm-error {
+  margin-top: 10px;
+  color: #d90429;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lm-hint {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+.lm-link {
+  color: #0f245b;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.lm-link:hover {
+  text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 820px) {
+  .lm-body {
+    grid-template-columns: 1fr;
+  }
+  .lm-left {
+    display: none;
+  }
+}
+
+.lm-link {
+  color: #0f245b;
+  font-weight: 800;
+  cursor: pointer;
+}
+.lm-link:hover {
+  text-decoration: underline;
+}
+
+/* Divider */
+.lm-divider {
+  margin: 20px 0 12px;
+  text-align: center;
+  position: relative;
+}
+
+.lm-divider span {
+  background: #fff;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #888;
+}
+
+.lm-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #e0e0e0;
+  z-index: -1;
+}
+
+/* Google wrapper */
+.lm-google-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* Google circular button */
+.google-icon-btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.google-icon-btn img {
+  width: 26px;
+  height: 26px;
+}
+
+.google-icon-btn:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}

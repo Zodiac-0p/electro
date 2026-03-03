@@ -4,20 +4,35 @@
   min-height: 100vh;
 }
 
+/* ============================= */
+/* MAIN PRODUCT CARD CONTAINER  */
+/* ============================= */
+
 .product-container {
-  display: flex;
-  gap: 40px;
   background: white;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+
+  /* IMPORTANT: NOT FLEX */
+  display: block;
+}
+
+/* ============================= */
+/* TOP ROW (Image + Details)    */
+/* ============================= */
+
+.product-row {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
 }
 
 .product-image-section {
   flex: 1;
   display: flex;
-  justify-content: center;  
-  align-items: flex-start;  
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .product-main-image {
@@ -75,6 +90,10 @@
   color: red;
 }
 
+/* ============================= */
+/* QUANTITY + BUTTON            */
+/* ============================= */
+
 .quantity-selector {
   display: flex;
   align-items: center;
@@ -110,15 +129,10 @@
   cursor: not-allowed;
 }
 
-.product-extra {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #666;
-}
+/* ============================= */
+/* RATING SECTION               */
+/* ============================= */
 
-/* your existing css stays... add these at bottom */
-
-/* ===== Rating row ===== */
 .rating-row {
   display: flex;
   align-items: center;
@@ -131,7 +145,6 @@
   opacity: 0.75;
 }
 
-/* ===== Stars ===== */
 .stars {
   display: flex;
   gap: 6px;
@@ -156,7 +169,48 @@
   cursor: default;
 }
 
-/* ===== Reviews ===== */
+/* ============================= */
+/* BADGES                       */
+/* ============================= */
+
+.product-badges {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 12px;
+  padding: 12px 8px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100px;
+}
+
+.badge-icon {
+  font-size: 38px;
+  color: #2874f0;
+  background: #e3f2fd;
+  padding: 7px;
+  border-radius: 50%;
+  margin-bottom: 6px;
+}
+
+.badge-item p {
+  font-size: 12.5px;
+  font-weight: 500;
+  margin: 0;
+  color: #333;
+}
+
+/* ============================= */
+/* REVIEWS                      */
+/* ============================= */
+
 .reviews-section {
   margin-top: 26px;
   padding-top: 18px;
@@ -225,7 +279,6 @@
 .review-user {
   font-weight: 700;
   font-size: 14px;
-  opacity: 0.9;
 }
 
 .review-date {
@@ -236,7 +289,6 @@
 
 .review-comment {
   margin: 0;
-  opacity: 0.9;
 }
 
 .muted {
@@ -248,17 +300,21 @@
   margin-top: 8px;
 }
 
-/* ===== Suggested products ===== */
-.suggested-section {
-  margin-top: 26px;
-  padding-top: 18px;
+/* ============================= */
+/* RELATED PRODUCTS FULL WIDTH  */
+/* ============================= */
+
+.fullwidth-related {
+  width: 100%;
+  margin-top: 30px;
+  padding-top: 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .suggested-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .suggested-card {
@@ -268,11 +324,11 @@
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease;
 }
 
 .suggested-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .suggested-img {
@@ -295,4 +351,30 @@
 .suggested-price {
   font-size: 14px;
   opacity: 0.85;
+}
+
+/* ============================= */
+/* RESPONSIVE                   */
+/* ============================= */
+
+@media (max-width: 1100px) {
+  .suggested-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .product-row {
+    flex-direction: column;
+  }
+
+  .suggested-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .suggested-grid {
+    grid-template-columns: 1fr;
+  }
 }

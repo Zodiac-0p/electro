@@ -11,7 +11,7 @@ const heroSlides = [
     subtitlecolor: "#ffffff",   
   },
   {
-    title: "Latest Electronics Trends 2024",
+    title: "Latest Electronics Trends 2026",
     subtitle: "Discover the newest innovations in IoT and embedded systems.",
     img: "/images/image3.jpg",
     cta: "Explore Now",

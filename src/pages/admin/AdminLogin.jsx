@@ -3,6 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 
+// ✅ Define API_BASE here (Fixes: API_BASE is not defined)
+const API_BASE = import.meta.env.DEV
+  ? import.meta.env.VITE_API_BASE_URL_LOCAL
+  : import.meta.env.VITE_API_BASE_URL_DEPLOY;
+
 const AdminLogin = () => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -18,30 +23,41 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/login/", {
+      // ✅ Admin login endpoint
+      const res = await axios.post(`${API_BASE}/admin/users/login/`, {
         identifier,
         password,
       });
 
-      if (!res.data.is_staff) {
+      console.log("LOGIN RESPONSE:", res.data);
+
+      // ✅ User object can be nested or flat (supports both)
+      const user = res.data.user ? res.data.user : res.data;
+
+      // ✅ Admin check
+      if (!(user.is_staff || user.is_superuser)) {
         setError("You are not an admin");
-        setLoading(false);
         return;
       }
 
+      // ✅ Store tokens
       localStorage.setItem("admin_access", res.data.access);
       localStorage.setItem("admin_refresh", res.data.refresh);
-      localStorage.setItem(
-        "admin_user",
-        JSON.stringify({
-          username: res.data.username,
-          is_staff: res.data.is_staff,
-        })
-      );
+
+      // ✅ Store user
+      localStorage.setItem("admin_user", JSON.stringify(user));
 
       navigate("/admin/dashboard");
     } catch (err) {
-      setError("Invalid credentials");
+      console.error("LOGIN ERROR:", err);
+
+      // Better error message if backend sends detail
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Invalid credentials";
+
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -116,7 +132,6 @@ const AdminLogin = () => {
                   type="button"
                   className="toggle-pass"
                   onClick={() => setShowPass((s) => !s)}
-                  aria-label="Toggle password visibility"
                 >
                   {showPass ? "Hide" : "Show"}
                 </button>
@@ -128,9 +143,7 @@ const AdminLogin = () => {
             </button>
 
             <div className="login-card__hint">
-              <small>
-                Only staff accounts can access this panel.
-              </small>
+              <small>Only staff accounts can access this panel.</small>
             </div>
           </form>
         </div>

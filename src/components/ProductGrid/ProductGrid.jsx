@@ -120,12 +120,11 @@ const ProductGrid = ({ products }) => {
                       </button>
                     </div>
 
-                    <button
+                   <button
                       className="pg-add-to-cart-btn"
                       onClick={async (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-
                         try {
                           await addToCart(product, selectedQty);
                           showToast("Added to cart ✅", "success");
@@ -134,7 +133,7 @@ const ProductGrid = ({ products }) => {
                         }
                       }}
                     >
-                      Add to Cart
+                      {window.innerWidth <= 520 ? "ADD" : "Add to Cart"}
                     </button>
                   </div>
                 )}

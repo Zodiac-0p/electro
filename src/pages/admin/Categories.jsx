@@ -23,9 +23,12 @@ const Categories = () => {
   const fileRef = useRef(null);
 
   const [q, setQ] = useState("");
+  const [sortBy, setSortBy] = useState("id"); // Sort field
+  const [sortOrder, setSortOrder] = useState("asc"); // Sort direction
 
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [deleting, setDeleting] = useState(null); // Track which category is being deleted
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -165,13 +168,59 @@ const Categories = () => {
     }
   };
 
+  const deleteCategory = async (categoryId) => {
+    if (!window.confirm("Are you sure you want to delete this category?")) {
+      return;
+    }
+
+    setDeleting(categoryId);
+    setError("");
+    setSuccess("");
+
+    try {
+      await adminApi.delete(`catalog/categories/${categoryId}/`);
+      setSuccess("Category deleted successfully!");
+      await loadCategories("catalog/categories/");
+    } catch (e) {
+      console.log("DELETE CATEGORY ERROR:", e?.response?.data || e?.message);
+      setError(extractErrorMessage(e?.response?.data));
+    } finally {
+      setDeleting(null);
+    }
+  };
+
   const shownCategories = useMemo(() => {
+    // Filter by search query
+    let filtered = categories;
     const query = q.trim().toLowerCase();
-    if (!query) return categories;
-    return categories.filter((c) =>
-      (c?.name || "").toLowerCase().includes(query)
-    );
-  }, [categories, q]);
+    if (query) {
+      filtered = categories.filter((c) =>
+        (c?.name || "").toLowerCase().includes(query)
+      );
+    }
+
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      let aVal, bVal;
+      if (sortBy === "name") {
+        aVal = (a.name || "").toLowerCase();
+        bVal = (b.name || "").toLowerCase();
+      } else if (sortBy === "slug") {
+        aVal = (a.slug || "").toLowerCase();
+        bVal = (b.slug || "").toLowerCase();
+      } else {
+        // id (default)
+        aVal = a.id || 0;
+        bVal = b.id || 0;
+      }
+
+      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return sorted;
+  }, [categories, q, sortBy, sortOrder]);
 
   return (
     <div className="admin-page">
@@ -245,19 +294,41 @@ const Categories = () => {
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search & Sort */}
       <div className="toolbar">
-        <input
-          className="search-input"
-          placeholder="Search categories..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
-        {q && (
-          <button className="btn btn-secondary" onClick={() => setQ("")}>
-            Clear
+        <div className="search-wrap">
+          <input
+            className="search-input"
+            placeholder="Search categories..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+          {q && (
+            <button className="btn btn-secondary" onClick={() => setQ("")}>
+              Clear
+            </button>
+          )}
+        </div>
+
+        <div className="sort-wrap">
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="id">Sort by ID</option>
+            <option value="name">Sort by Name</option>
+            <option value="slug">Sort by Slug</option>
+          </select>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            title={`Sorted ${sortOrder === "asc" ? "ascending" : "descending"}`}
+          >
+            {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
           </button>
-        )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -277,19 +348,29 @@ const Categories = () => {
           <table className="admin-table">
             <thead>
               <tr>
-                <th style={{ width: 100 }}>ID</th>
+                <th style={{ width: 80 }}>ID</th>
                 <th>Name</th>
-                <th style={{ width: 220 }}>Slug</th>
+                <th style={{ width: 180 }}>Slug</th>
+                <th style={{ width: 100 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {shownCategories.map((c) => (
+              {shownCategories.map((c, index) => (
                 <tr key={c.id}>
-                  <td className="muted">#{c.id}</td>
+                  <td className="muted">#{index + 1}</td>
                   <td className="name-cell">
                     <div className="name">{c.name}</div>
                   </td>
                   <td className="muted">{c.slug || "—"}</td>
+                  <td>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteCategory(c.id)}
+                      disabled={deleting === c.id || loading}
+                    >
+                      {deleting === c.id ? "Deleting..." : "Delete"}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

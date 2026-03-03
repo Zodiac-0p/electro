@@ -2,11 +2,7 @@ import axios from "axios";
 
 // const API_BASE = "http://127.0.0.1:8000/api";
 
-const isDevelopment = import.meta.env.DEV;
-
-const API_BASE = isDevelopment
-  ? import.meta.env.VITE_API_BASE_URL_LOCAL
-  : import.meta.env.VITE_API_BASE_URL_DEPLOY;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 // ====================== API FETCH WITH AUTO REFRESH ======================
 export const apiFetch = async (

@@ -11,6 +11,12 @@ export const apiFetch = async (
   auth = false,
   token = null
 ) => {
+  // small helper: sleep for ms
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  // retry config
+  const MAX_RETRIES = 3;
+  const RETRY_STATUS = [429, 503];
   // ✅ IMPORTANT: Don't set Content-Type for GET/requests without body (avoids preflight)
   const headers = {};
 
@@ -27,12 +33,41 @@ export const apiFetch = async (
     headers["Content-Type"] = "application/json";
   }
 
-  let response = await fetch(`${API_BASE}${endpoint}`, {
-    method,
-    headers,
-    credentials: "omit", // ✅ JWT based: keep omit
-    body: hasBody ? JSON.stringify(body) : null,
-  });
+  let attempt = 0;
+  let response = null;
+
+  while (attempt < MAX_RETRIES) {
+    try {
+      response = await fetch(`${API_BASE}${endpoint}`, {
+        method,
+        headers,
+        credentials: "omit", // ✅ JWT based: keep omit
+        body: hasBody ? JSON.stringify(body) : null,
+      });
+
+      // if server asks us to retry (rate limit / unavailable), loop and backoff
+      if (RETRY_STATUS.includes(response.status)) {
+        attempt += 1;
+        const wait = 500 * attempt; // exponential-ish backoff
+        await sleep(wait);
+        continue;
+      }
+
+      break; // got a non-retry status
+    } catch (err) {
+      // network error (CORS blocked or network down). If it's the last attempt, rethrow with hint.
+      attempt += 1;
+      if (attempt >= MAX_RETRIES) {
+        const hint =
+          err instanceof TypeError && err.message && err.message.includes("Failed to fetch")
+            ? 'Possible causes: network down, server unreachable, or missing CORS headers on the backend.'
+            : '';
+        err.message = `${err.message || 'Network error'} ${hint}`.trim();
+        throw err;
+      }
+      await sleep(300 * attempt);
+    }
+  }
 
   // ================= TOKEN EXPIRED =================
   if (response.status === 401) {

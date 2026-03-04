@@ -39,7 +39,7 @@ function Header() {
   const { cartCount } = useCart();
   const navigate = useNavigate();
 
-  // ✅ NEW: sync auth state from the REAL keys your login saves
+  // ✅ sync auth state from the REAL keys your login saves
   const syncAuthState = () => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
@@ -79,9 +79,11 @@ function Header() {
     const loadCategories = async () => {
       try {
         const data = await fetchCategories();
-        setCategories(data.results || []);
+        // ✅ safer: only use array
+        setCategories(Array.isArray(data?.results) ? data.results : []);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        setCategories([]);
       } finally {
         setLoadingCategories(false);
       }
@@ -90,17 +92,17 @@ function Header() {
     loadCategories();
   }, []);
 
-  // ✅ Keep syncing username/login across tabs and updates
+  // ✅ Keep syncing username/login across tabs and updates (NO INTERVAL)
   useEffect(() => {
     const onStorage = () => syncAuthState();
-    window.addEventListener("storage", onStorage);
+    const onFocus = () => syncAuthState();
 
-    // keep your existing interval-style syncing
-    const interval = setInterval(syncAuthState, 500);
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("focus", onFocus);
 
     return () => {
       window.removeEventListener("storage", onStorage);
-      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
     };
   }, []);
 
@@ -158,7 +160,7 @@ function Header() {
     const fetchSuggestions = async () => {
       try {
         const data = await searchProducts(searchQuery, selectedCategory, 5);
-        setSearchSuggestions(Array.isArray(data.results) ? data.results : []);
+        setSearchSuggestions(Array.isArray(data?.results) ? data.results : []);
       } catch {
         setSearchSuggestions([]);
       }
@@ -371,8 +373,8 @@ function Header() {
             </div>
 
             {/* Services Dropdown */}
-
-            {/* <div
+            {/* 
+            <div
               className="dropdown-nav-item"
               onMouseEnter={() => setIsServicesOpen(true)}
               onMouseLeave={() => setIsServicesOpen(false)}
@@ -387,11 +389,12 @@ function Header() {
                   <Link to="/services/custom">Custom Solutions</Link>
                 </div>
               )}
-            </div> */}
+            </div> 
+            */}
 
             {/* Blogs Dropdown */}
-
-            {/* <div
+            {/* 
+            <div
               className="dropdown-nav-item"
               onMouseEnter={() => setIsBlogsOpen(true)}
               onMouseLeave={() => setIsBlogsOpen(false)}
@@ -405,7 +408,8 @@ function Header() {
                   <Link to="/blogs/guides">How-to Guides</Link>
                 </div>
               )}
-            </div> */}
+            </div> 
+            */}
 
             {/* Information Dropdown */}
             <div
@@ -477,8 +481,8 @@ function Header() {
               )}
 
               {/* Services */}
-
-              {/* <button
+              {/* 
+              <button
                 className="m-collapsible"
                 onClick={() => setMServicesOpen(!mServicesOpen)}
                 type="button"
@@ -497,11 +501,12 @@ function Header() {
                     Custom Solutions
                   </Link>
                 </div>
-              )} */}
+              )} 
+              */}
 
               {/* Blogs */}
-
-              {/* <button
+              {/* 
+              <button
                 className="m-collapsible"
                 onClick={() => setMBlogsOpen(!mBlogsOpen)}
                 type="button"
@@ -517,7 +522,8 @@ function Header() {
                     How-to Guides
                   </Link>
                 </div>
-              )} */}
+              )} 
+              */}
 
               {/* Information */}
               <button

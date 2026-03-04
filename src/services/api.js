@@ -1,7 +1,6 @@
 import axios from "axios";
 
 // const API_BASE = "http://127.0.0.1:8000/api";
-
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 // ====================== API FETCH WITH AUTO REFRESH ======================
@@ -12,9 +11,8 @@ export const apiFetch = async (
   auth = false,
   token = null
 ) => {
-  const headers = {
-    "Content-Type": "application/json",
-  };
+  // ✅ IMPORTANT: Don't set Content-Type for GET/requests without body (avoids preflight)
+  const headers = {};
 
   let accessToken = token || localStorage.getItem("accessToken");
 
@@ -22,11 +20,18 @@ export const apiFetch = async (
     headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
+  // ✅ Only set Content-Type when we actually send JSON
+  const hasBody = body !== null && body !== undefined;
+
+  if (hasBody) {
+    headers["Content-Type"] = "application/json";
+  }
+
   let response = await fetch(`${API_BASE}${endpoint}`, {
     method,
     headers,
-    credentials: "omit",
-    body: body ? JSON.stringify(body) : null,
+    credentials: "omit", // ✅ JWT based: keep omit
+    body: hasBody ? JSON.stringify(body) : null,
   });
 
   // ================= TOKEN EXPIRED =================
@@ -51,6 +56,7 @@ export const apiFetch = async (
       const refreshResponse = await fetch(`${API_BASE}/user/token/refresh/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "omit", // ✅ keep omit
         body: JSON.stringify({ refresh: refreshToken }),
       });
 
@@ -67,8 +73,8 @@ export const apiFetch = async (
         response = await fetch(`${API_BASE}${endpoint}`, {
           method,
           headers,
-          credentials: "include",
-          body: body ? JSON.stringify(body) : null,
+          credentials: "omit", // ✅ FIX: keep omit (was include before)
+          body: hasBody ? JSON.stringify(body) : null,
         });
       } else {
         localStorage.removeItem("accessToken");
@@ -208,14 +214,8 @@ export const logoutUser = async () => {
 };
 
 // ======================= PRODUCTS =======================
-export const fetchProducts = async ({ page = 1, page_size = 12 } = {}) => {
-  return await apiFetch(
-    `/catalog/products/?page=${page}&page_size=${page_size}`,
-    "GET",
-    null,
-    false
-  );
-};
+export const fetchProducts = async ({ page = 1, page_size = 12 } = {}) =>
+  apiFetch(`/catalog/products/?page=${page}&page_size=${page_size}`, "GET", null, false);
 
 export const fetchProductById = (id) => apiFetch(`/catalog/products/${id}/`);
 
@@ -337,6 +337,7 @@ export const handleSelectAddress = (
     setSelectedShippingId(address.id);
   }
 };
+
 // ✅ PHONE LOGIN (public endpoints)
 export const phoneLoginSendOtp = (phone_number) =>
   apiFetch("/user/phone/login/send-otp/", "POST", { phone_number }, false);
@@ -345,7 +346,6 @@ export const phoneLoginVerifyOtp = (phone_number, otp) =>
   apiFetch("/user/phone/login/verify-otp/", "POST", { phone_number, otp }, false);
 
 // ======================= CART =======================
-// ✅ IMPORTANT: These MUST be auth=true after login
 export const getCart = async () => apiFetch("/user/cart/", "GET", null, true);
 
 export const addToCart = (productId, quantity = 1) =>
@@ -367,7 +367,8 @@ export const updateUserProfile = (profileData) =>
   apiFetch("/user/me/", "PUT", profileData, true);
 
 // ======================= RFQ =======================
-export const submitRFQ = (rfqData) => apiFetch("/rfq/submit/", "POST", rfqData, true);
+export const submitRFQ = (rfqData) =>
+  apiFetch("/rfq/submit/", "POST", rfqData, true);
 
 // ======================= LATEST & FEATURED PRODUCTS =======================
 export const fetchLatestProducts = (limit = 5) =>
@@ -388,6 +389,8 @@ export const submitQuotation = (quotationData) =>
   apiFetch("/user/quotation/submit/", "POST", quotationData, true);
 
 // ======================= HELPDESK =======================
+// ⚠️ This uses cookies/CSRF. Keep as-is only if backend sets csrftoken cookie.
+// If you are purely JWT, consider changing this endpoint to accept JWT too.
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);

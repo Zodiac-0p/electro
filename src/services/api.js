@@ -25,7 +25,7 @@ export const apiFetch = async (
   let response = await fetch(`${API_BASE}${endpoint}`, {
     method,
     headers,
-    credentials: "include",
+    credentials: "omit",
     body: body ? JSON.stringify(body) : null,
   });
 

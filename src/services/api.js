@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const API_BASE =
-  import.meta.env.MODE === "development"
-    ? "http://127.0.0.1:8000/api"
-    : (import.meta.env.VITE_API_BASE_URL || "https://electro-backend-f1rh.onrender.com/api");
+const API_BASE = import.meta.env.DEV
+  ? "http://127.0.0.1:8000/api"
+  : "https://electro-backend-f1rh.onrender.com/api";
 
 // ====================== API FETCH WITH AUTO REFRESH ======================
 export const apiFetch = async (
